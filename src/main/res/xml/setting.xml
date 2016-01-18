@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <EditTextPreference
+      android:key="period"
+      android:summary=""
+      android:title="自動切替時間(単位:秒)"
+      android:inputType="time"
+      android:maxLength="10"
+      android:defaultValue="180"/>
+  <EditTextPreference
+      android:key="switchingInterval"
+      android:summary=""
+      android:title="切替間隔(単位:秒)"
+      android:inputType="time"
+      android:maxLength="10"
+      android:defaultValue="7"/>
+</PreferenceScreen>

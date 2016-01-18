@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2015 47 Degrees, LLC http://47deg.com hello@47deg.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may
+  ~ not use this file except in compliance with the License. You may obtain
+  ~ a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <!-- Main colors -->
+    <color name="primary">#364550</color>
+    <color name="primary_dark">#2F3C46</color>
+    <color name="color_control_highlight">#2F3C46</color>
+    <color name="accent">#E05F5E</color>
+    <color name="toolbar_title">#ffffff</color>
+    <color name="menu_conference_title">#ffffff</color>
+    <color name="ripple_mask">#22000000</color>
+    <color name="background_app">#ffffff</color>
+
+    <!-- Placeholder -->
+    <color name="text_error_message">#87364550</color>
+    <color name="text_error_button">#ffffff</color>
+    <color name="background_error_button_default">#E05F5E</color>
+    <color name="background_error_button_pressed">#ffc45453</color>
+
+    <!-- Menu -->
+    <color name="background_main_menu">#364550</color>
+    <color name="background_menu_header_selected">#44c2c2c2</color>
+    <color name="background_menu_item">#00000000</color>
+    <color name="background_menu_item_pressed">#22000000</color>
+    <color name="background_menu_item_selected">#2F3C46</color>
+
+    <!-- Lists -->
+    <color name="text_title_default">#364550</color>
+    <color name="text_twitter_default">#E05F5E</color>
+    <color name="text_date_default">#96364550</color>
+    <color name="list_line_default">#50364550</color>
+    <color name="placeholder_default">#E4E9EB</color>
+
+    <color name="background_list_pressed_default">#dddddd</color>
+
+    <!-- Schedule -->
+    <color name="background_list_schedule_header">#6CCFE9</color>
+    <color name="background_list_schedule_hour">#4695AE</color>
+    <color name="background_list_schedule_hour_current_event">#337488</color>
+    <color name="background_list_schedule_info">#55B2CE</color>
+    <color name="text_schedule_room">#427E91</color>
+    <color name="text_schedule_name">#ffffff</color>
+    <color name="text_schedule_twitter">#364550</color>
+    <color name="list_line_schedule">#6CCFE9</color>
+
+    <color name="background_speaker_avatar_schedule">#4695AE</color>
+    <color name="stroke_speaker_avatar_schedule">#ffffff</color>
+
+    <!-- Schedule Detail -->
+    <color name="text_schedule_detail_secondary">#ad364550</color>
+    <color name="fab_no_check_color_dark">#ffa14746</color>
+    <color name="fab_check_color_dark">#ff3da97c</color>
+    <color name="fab_no_check_color">#E05F5E</color>
+    <color name="fab_check_color">#ff52e0a3</color>
+    <color name="fab_shadow_color">#46000000</color>
+
+    <!-- Places -->
+    <color name="info_window_title">#E05F5E</color>
+    <color name="info_window_snippet">#364550</color>
+
+</resources>

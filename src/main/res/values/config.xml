@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2015 47 Degrees, LLC http://47deg.com hello@47deg.com
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License"); you may
+  ~  not use this file except in compliance with the License. You may obtain
+  ~  a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<resources>
+
+    <string name="url_json_conference">http://scala-days-2015.s3.amazonaws.com/conferences.json</string>
+    <string name="url_47deg">http://www.47deg.com</string>
+    <string name="url_twitter_user">https://twitter.com/%s</string>
+    <string name="url_twitter_status">https://twitter.com/%1$s/status/%2$s</string>
+    <string name="url_twitter_new_status">https://twitter.com/intent/tweet?source=webclient&amp;text=%s</string>
+
+    <!-- Google -->
+    <string name="google_map_key">${google.map.key}</string>
+    <string name="google_project_number">${google.project.number}</string>
+    <string name="google_analytics_key">${google.analytics.key}</string>
+
+    <!-- Localytics -->
+    <string name="localytics_key">${localytics.key}</string>
+
+    <!-- Crashlytics -->
+    <string name="crashlytics_key">${crashlytics.key}</string>
+
+    <!-- Twitter Api -->
+    <string name="twitter_app_key">${twitter.app.key}</string>
+    <string name="twitter_app_secret">${twitter.app.secret}</string>
+    <string name="twitter_app_callback_host">${twitter.app.callback.host}</string>
+
+</resources>

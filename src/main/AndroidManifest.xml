@@ -1,0 +1,41 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="iwai.cellmon"
+          android:versionCode="0"
+          android:versionName="0.2">
+
+  <uses-sdk
+      android:minSdkVersion="21"
+      android:targetSdkVersion="23"/>
+  <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+  <application
+      android:label="cellmon"
+      android:name=".LoggingApplication"
+      android:icon="@drawable/android:star_big_on"
+      android:theme="@style/AppTheme">
+    <activity
+        android:label="Initial"
+        android:name=".ui.activity.InitialActivity">
+      <intent-filter android:label="cellmon">
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <activity
+        android:label="Main"
+        android:name=".ui.activity.main.MainActivity">
+    </activity>
+    <activity
+        android:label="Cell History"
+        android:name=".ui.activity.CellHistoryActivity">
+    </activity>
+    <activity
+        android:label="Setting"
+        android:name=".ui.activity.SettingActivity">
+    </activity>
+    <service android:name=".ui.service.CellChangeListener" />
+  </application>
+</manifest>
