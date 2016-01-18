@@ -1,6 +1,7 @@
 target/
 .idea
 .idea_modules
+proguard-sbt.txt
 gen
 project/project
 project/target
