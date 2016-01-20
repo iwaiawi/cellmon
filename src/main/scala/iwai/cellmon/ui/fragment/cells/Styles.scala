@@ -25,6 +25,7 @@ import com.fortysevendeg.macroid.extras.TextTweaks._
 import com.fortysevendeg.macroid.extras.ViewTweaks._
 import iwai.cellmon.R
 import macroid.{ContextWrapper, Tweak}
+import macroid.FullDsl._
 
 import scala.language.postfixOps
 
@@ -67,6 +68,28 @@ trait Styles {
     vWrapContent +
       tvColorResource(R.color.primary) +
       tvSize(context.application.getResources.getInteger(R.integer.text_medium)) +
+      vPadding(0, resGetDimensionPixelSize(R.dimen.padding_default), 0, 0)
+
+}
+
+trait AdapterStyles {
+
+  def itemContentStyle(implicit context: ContextWrapper): Tweak[LinearLayout] =
+    vMatchParent +
+      vPaddings(resGetDimensionPixelSize(R.dimen.padding_default)) +
+      llGravity(Gravity.CENTER) +
+      vBackground(R.drawable.background_list_default)
+
+  def changeAtStyle(implicit context: ContextWrapper): Tweak[TextView] =
+    vWrapContent +
+      tvColorResource(R.color.accent) +
+      tvSize(resGetInteger(R.integer.text_small)) +
+      vPadding(0, resGetDimensionPixelSize(R.dimen.padding_default), 0, 0)
+
+  def cellStyle(implicit context: ContextWrapper): Tweak[TextView] =
+    vWrapContent +
+      tvColorResource(R.color.primary) +
+      tvSize(resGetInteger(R.integer.text_medium)) +
       vPadding(0, resGetDimensionPixelSize(R.dimen.padding_default), 0, 0)
 
 }

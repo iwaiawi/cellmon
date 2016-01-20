@@ -19,6 +19,7 @@ package iwai.cellmon.ui.fragment.cells
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
+import android.support.v7.widget.RecyclerView
 import android.widget._
 import com.fortysevendeg.macroid.extras.ResourcesExtras._
 import iwai.cellmon.R
@@ -30,7 +31,7 @@ trait Layout
   extends Styles
   with PlaceHolderLayout {
 
-  self: Fragment/* with AnalyticsServicesComponent*/ =>
+  self: Fragment =>
 
   var description = slot[TextView]
 
@@ -54,10 +55,6 @@ trait Layout
           w[TextView] <~ about47TextStyle
         ) <~ about47ContentStyle <~ wire(aboutContent) <~ On.click {
           Ui {
-//            analyticsServices.sendEvent(
-//              screenName = Some(analyticsAboutScreen),
-//              category = analyticsCategoryNavigate,
-//              action = analyticsAboutActionGoTo47Deg)
             startActivity(new Intent(Intent.ACTION_VIEW,
               Uri.parse(resGetString(R.string.url_47deg))))
           }
@@ -66,5 +63,33 @@ trait Layout
       placeholder <~ wire(placeholderContent)
     )
   )
+
+}
+
+class CellChangesLayoutAdapter(implicit context: ActivityContextWrapper)
+  extends AdapterStyles {
+
+//  var logo = slot[ImageView]
+  var changeAt = slot[TextView]
+  var cell = slot[TextView]
+
+  val content = layout
+
+  private def layout(implicit context: ActivityContextWrapper) = getUi(
+    l[LinearLayout](
+      w[TextView] <~ wire(changeAt) <~ changeAtStyle,
+      w[TextView] <~ wire(cell) <~ cellStyle
+    ) <~ itemContentStyle
+  )
+}
+
+class ViewHolderCellChangesAdapter(adapter: CellChangesLayoutAdapter)(implicit context: ActivityContextWrapper)
+  extends RecyclerView.ViewHolder(adapter.content) {
+
+  val content = adapter.content
+
+//  val logo = adapter.logo
+  val changeAt = adapter.changeAt
+  val cell = adapter.cell
 
 }
