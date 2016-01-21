@@ -10,6 +10,14 @@ import android.view.{WindowManager, View, Gravity}
 import android.widget.{TableLayout, TableRow}
 
 import macroid._
+import macroid.FullDsl._
+
+import scala.concurrent.Future
+import scala.tools.nsc.backend.icode.Opcodes.opcodes.CALL_METHOD
+import scala.tools.nsc.backend.icode.Opcodes.opcodes.CALL_METHOD
+import scala.util.Try
+import scalaz.\/
+import scalaz.concurrent.Task
 
 trait Implicits {
 
@@ -23,6 +31,12 @@ trait Implicits {
 		override def onCellLocationChanged(c: CellLocation) = f(c).run
 	}
 
+	/** Helpers to run UI actions as Task callbacks */
+	implicit class UiTask[T](task: Task[T]) {
+
+		def runAsyncUi[S](f: (Throwable \/ T) => Ui[S]): Unit =
+			task.runAsync(f.andThen(_.run))
+	}
 }
 
 object Implicits extends Implicits
