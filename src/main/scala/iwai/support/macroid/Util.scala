@@ -12,10 +12,6 @@ import android.widget.{TableLayout, TableRow}
 import macroid._
 import macroid.FullDsl._
 
-import scala.concurrent.Future
-import scala.tools.nsc.backend.icode.Opcodes.opcodes.CALL_METHOD
-import scala.tools.nsc.backend.icode.Opcodes.opcodes.CALL_METHOD
-import scala.util.Try
 import scalaz.\/
 import scalaz.concurrent.Task
 
