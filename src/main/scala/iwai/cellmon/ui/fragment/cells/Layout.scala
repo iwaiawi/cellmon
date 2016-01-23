@@ -83,7 +83,7 @@ class CellChangesLayoutAdapter(implicit context: ActivityContextWrapper)
   )
 }
 
-class ViewHolderCellChangesAdapter(adapter: CellChangesLayoutAdapter)(implicit context: ActivityContextWrapper)
+class CellChangesViewHolder(adapter: CellChangesLayoutAdapter)(implicit context: ActivityContextWrapper)
   extends RecyclerView.ViewHolder(adapter.content) {
 
   val content = adapter.content
