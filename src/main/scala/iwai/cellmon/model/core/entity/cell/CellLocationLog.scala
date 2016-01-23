@@ -16,12 +16,12 @@ case object CellLocationLog {
 	def apply[A <: Cell](cell: A, l: android.location.Location, provider: LocationProvider): CellLocationLog[A] =
 		CellLocationLog(cell, Location(l), l.getTime, provider)
 
-	trait JsonProtocol extends DefaultJsonProtocol {
-
-		implicit def cellLocationLogFormat[A <: Cell : JsonFormat]: JsonFormat[CellLocationLog[A]] =
-			jsonFormat(CellLocationLog.apply[A], "cell", "location", "timeInMillis", "provider")
-	}
-
-	object JsonProtocol extends JsonProtocol
+//	trait JsonProtocol extends DefaultJsonProtocol {
+//
+//		implicit def cellLocationLogFormat[A <: Cell : JsonFormat]: JsonFormat[CellLocationLog[A]] =
+//			jsonFormat(CellLocationLog.apply[A], "cell", "location", "timeInMillis", "provider")
+//	}
+//
+//	object JsonProtocol extends JsonProtocol
 
 }

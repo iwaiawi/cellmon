@@ -77,19 +77,20 @@ trait AdapterStyles {
   def itemContentStyle(implicit context: ContextWrapper): Tweak[LinearLayout] =
     vMatchParent +
       vPaddings(resGetDimensionPixelSize(R.dimen.padding_default)) +
-      llGravity(Gravity.CENTER) +
+      llVertical +
+//      llGravity(Gravity.CENTER) +
       vBackground(R.drawable.background_list_default)
 
   def changeAtStyle(implicit context: ContextWrapper): Tweak[TextView] =
     vWrapContent +
       tvColorResource(R.color.accent) +
-      tvSize(resGetInteger(R.integer.text_small)) +
-      vPadding(0, resGetDimensionPixelSize(R.dimen.padding_default), 0, 0)
-
+      tvSize(resGetInteger(R.integer.text_small)) //+
+//      vPadding(0, resGetDimensionPixelSize(R.dimen.padding_default), 0, 0)
+//
   def cellStyle(implicit context: ContextWrapper): Tweak[TextView] =
     vWrapContent +
       tvColorResource(R.color.primary) +
-      tvSize(resGetInteger(R.integer.text_medium)) +
-      vPadding(0, resGetDimensionPixelSize(R.dimen.padding_default), 0, 0)
+      tvSize(resGetInteger(R.integer.text_medium)) //+
+//      vPadding(0, resGetDimensionPixelSize(R.dimen.padding_default), 0, 0)
 
 }

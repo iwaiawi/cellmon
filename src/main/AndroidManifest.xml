@@ -17,7 +17,7 @@
       android:icon="@drawable/android:star_big_on"
       android:theme="@style/AppTheme">
     <activity
-        android:label="Initial"
+        android:label="cellmon"
         android:name=".ui.activity.InitialActivity">
       <intent-filter android:label="cellmon">
         <action android:name="android.intent.action.MAIN"/>

@@ -10,7 +10,7 @@ import android.util.Log
 import iwai.cellmon.model.support.android.repository.cellchange.CellChangeFileRepository
 import iwai.cellmon.ui._
 import iwai.cellmon.model.core.entity.cell.{Cell, CellChange}
-import iwai.cellmon.model.core.entity.cell.JsonProtocol._
+//import iwai.cellmon.model.core.entity.cell.JsonProtocol._
 import iwai.cellmon.model.core.service.CellChangeService
 import iwai.cellmon.ui.common.CellChangePutCompleteEvent
 import macroid.{Contexts, ContextWrapper}
