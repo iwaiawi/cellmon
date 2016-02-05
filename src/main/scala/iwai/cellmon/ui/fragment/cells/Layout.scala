@@ -66,10 +66,10 @@ trait Layout
 
 }
 
-class CellChangesLayoutAdapter(implicit context: ActivityContextWrapper)
-  extends AdapterStyles {
+class CellChangeItemLayout(implicit context: ActivityContextWrapper)
+  extends ItemStyles {
 
-//  var logo = slot[ImageView]
+  var itemContent = slot[LinearLayout]
   var changeAt = slot[TextView]
   var cell = slot[TextView]
 
@@ -79,17 +79,18 @@ class CellChangesLayoutAdapter(implicit context: ActivityContextWrapper)
     l[LinearLayout](
       w[TextView] <~ wire(changeAt) <~ changeAtStyle,
       w[TextView] <~ wire(cell) <~ cellStyle
-    ) <~ itemContentStyle
+    ) <~ wire(itemContent) <~ itemContentStyle
   )
 }
 
-class CellChangesViewHolder(adapter: CellChangesLayoutAdapter)(implicit context: ActivityContextWrapper)
-  extends RecyclerView.ViewHolder(adapter.content) {
+class CellChangeViewHolder(itemLayout: CellChangeItemLayout)(implicit context: ActivityContextWrapper)
+  extends RecyclerView.ViewHolder(itemLayout.content) {
 
-  val content = adapter.content
+  // shortcut to slot
+  val content = itemLayout.content
 
 //  val logo = adapter.logo
-  val changeAt = adapter.changeAt
-  val cell = adapter.cell
+  val changeAt = itemLayout.changeAt
+  val cell = itemLayout.cell
 
 }

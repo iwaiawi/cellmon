@@ -91,6 +91,8 @@ case object Hour {
 	}
 
 	def apply(): Hour = apply(new Date())
+
+	def now(): Hour = apply(new Date())
 }
 
 case object Day {

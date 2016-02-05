@@ -26,64 +26,68 @@ import macroid.FullDsl._
 import macroid.{ActivityContextWrapper, Tweak, Ui}
 
 trait ListLayout
-  extends ListStyles
-  with PlaceHolderLayout {
+		extends ListStyles
+		with PlaceHolderLayout {
 
-  var recyclerView = slot[RecyclerView]
+	var recyclerView = slot[RecyclerView]
 
-  var progressBar = slot[ProgressBar]
+	var progressBar = slot[ProgressBar]
 
-  var placeholderContent = slot[LinearLayout]
+	var placeholderContent = slot[LinearLayout]
 
-  var refreshLayout = slot[SwipeRefreshLayout]
+	var refreshLayout = slot[SwipeRefreshLayout]
 
-  def content(implicit context: ActivityContextWrapper) = getUi(
-    l[FrameLayout](
-      w[ProgressBar] <~ wire(progressBar) <~ progressBarStyle,
-      w[RecyclerView] <~ wire(recyclerView) <~ recyclerViewStyle,
-      placeholder <~ wire(placeholderContent)
-    ) <~ rootStyle
-  )
+	def content(implicit context: ActivityContextWrapper) = getUi(
+		l[FrameLayout](
+			w[ProgressBar] <~ wire(progressBar) <~ progressBarStyle,
+			w[RecyclerView] <~ wire(recyclerView) <~ recyclerViewStyle,
+			placeholder <~ wire(placeholderContent)
+		) <~ rootStyle
+	)
 
-  def contentWithSwipeRefresh(implicit context: ActivityContextWrapper) = getUi(
-    l[FrameLayout](
-      w[ProgressBar] <~ wire(progressBar) <~ progressBarStyle,
-      l[SwipeRefreshLayout](
-        w[RecyclerView] <~ wire(recyclerView) <~ recyclerViewStyle
-      ) <~ wire(refreshLayout),
-      placeholder <~ wire(placeholderContent)
-    ) <~ rootStyle
-  )
+	def contentWithSwipeRefresh(implicit context: ActivityContextWrapper) = getUi(
+		l[FrameLayout](
+			w[ProgressBar] <~ wire(progressBar) <~ progressBarStyle,
+			l[SwipeRefreshLayout](
+				w[RecyclerView] <~ wire(recyclerView) <~ recyclerViewStyle
+			) <~ wire(refreshLayout),
+			placeholder <~ wire(placeholderContent)
+		) <~ rootStyle
+	)
 
-  def loading(): Ui[_] = (progressBar <~ vVisible) ~
-    (recyclerView <~ vGone) ~
-    (placeholderContent <~ vGone)
+	def loading(): Ui[_] = (progressBar <~ vVisible) ~
+			(recyclerView <~ vGone) ~
+			(placeholderContent <~ vGone) ~
+			(refreshLayout <~ srlRefreshing(false))
 
-  def failed(): Ui[_] = loadFailed() ~
-    (progressBar <~ vGone) ~
-    (recyclerView <~ vGone) ~
-    (placeholderContent <~ vVisible)
+	def failed(): Ui[_] = loadFailed() ~
+			(progressBar <~ vGone) ~
+			(recyclerView <~ vGone) ~
+			(placeholderContent <~ vVisible) ~
+			(refreshLayout <~ srlRefreshing(false))
 
-  def empty(): Ui[_] = loadEmpty() ~
-    (progressBar <~ vGone) ~
-    (recyclerView <~ vGone) ~
-    (placeholderContent <~ vVisible)
+	def empty(): Ui[_] = loadEmpty() ~
+			(progressBar <~ vGone) ~
+			(recyclerView <~ vGone) ~
+			(placeholderContent <~ vVisible) ~
+			(refreshLayout <~ srlRefreshing(false))
 
-  def noFavorites(): Ui[_] = loadNoFavorites() ~
-    (progressBar <~ vGone) ~
-    (recyclerView <~ vGone) ~
-    (placeholderContent <~ vVisible)
+	def noFavorites(): Ui[_] = loadNoFavorites() ~
+			(progressBar <~ vGone) ~
+			(recyclerView <~ vGone) ~
+			(placeholderContent <~ vVisible) ~
+			(refreshLayout <~ srlRefreshing(false))
 
-  def adapter[VH <: RecyclerView.ViewHolder](adapter: RecyclerView.Adapter[VH]): Ui[_] = (progressBar <~ vGone) ~
-    (placeholderContent <~ vGone) ~
-    (recyclerView <~ vVisible <~ rvAdapter(adapter))
+	def adapter[VH <: RecyclerView.ViewHolder](adapter: RecyclerView.Adapter[VH]): Ui[_] = (progressBar <~ vGone) ~
+			(placeholderContent <~ vGone) ~
+			(recyclerView <~ vVisible <~ rvAdapter(adapter))
 
-  def srlRefreshing(refreshing: Boolean) = Tweak[SwipeRefreshLayout](_.setRefreshing(refreshing))
+	def srlRefreshing(refreshing: Boolean) = Tweak[SwipeRefreshLayout](_.setRefreshing(refreshing))
 
-  def srlOnRefreshListener(f: => Ui[_]) = Tweak[SwipeRefreshLayout](_.setOnRefreshListener(new OnRefreshListener {
-    override def onRefresh(): Unit = {
-      runUi(f)
-    }
-  }))
+	def srlOnRefreshListener(f: => Ui[_]) = Tweak[SwipeRefreshLayout](_.setOnRefreshListener(new OnRefreshListener {
+		override def onRefresh(): Unit = {
+			runUi(f)
+		}
+	}))
 
 }
