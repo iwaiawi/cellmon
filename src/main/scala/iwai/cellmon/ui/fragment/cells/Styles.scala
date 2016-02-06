@@ -89,7 +89,7 @@ trait AdapterStyles {
 
 trait ItemStyles {
 
-	def itemContentStyle(implicit context: ContextWrapper): Tweak[LinearLayout] =
+	def contentStyle(implicit context: ContextWrapper): Tweak[LinearLayout] =
 		vMatchParent +
 				vPaddings(resGetDimensionPixelSize(R.dimen.padding_default)) +
 				llVertical +

@@ -21,12 +21,12 @@ trait Implicits {
 		override def onClick(v: View): Unit = f(v)
 	}
 
-		implicit class ViewWrapper(view: View) {
-
-			def onClick(f: View => Ui[_]): Unit = view.setOnClickListener(new OnClickListener {
-				override def onClick(v: View): Unit = runUi(f(v))
-			})
-		}
+//		implicit class ViewWrapper(view: View) {
+//
+//			def onClick(f: View => Ui[_]): Unit = view.setOnClickListener(new OnClickListener {
+//				override def onClick(v: View): Unit = runUi(f(v))
+//			})
+//		}
 
 	//	implicit class TimePickerWrapper(picker: TimePicker) {
 	//		def getCurrentTime(): Long = getCurrentCalendar.getTimeInMillis

@@ -37,15 +37,15 @@ trait ListLayout
 
 	var refreshLayout = slot[SwipeRefreshLayout]
 
-	def content(implicit context: ActivityContextWrapper) = getUi(
+	def layout(implicit context: ActivityContextWrapper) = /*getUi(*/
 		l[FrameLayout](
 			w[ProgressBar] <~ wire(progressBar) <~ progressBarStyle,
 			w[RecyclerView] <~ wire(recyclerView) <~ recyclerViewStyle,
 			placeholder <~ wire(placeholderContent)
 		) <~ rootStyle
-	)
+/*	)*/
 
-	def contentWithSwipeRefresh(implicit context: ActivityContextWrapper) = getUi(
+	def layoutWithSwipeRefresh(implicit context: ActivityContextWrapper) =
 		l[FrameLayout](
 			w[ProgressBar] <~ wire(progressBar) <~ progressBarStyle,
 			l[SwipeRefreshLayout](
@@ -53,7 +53,6 @@ trait ListLayout
 			) <~ wire(refreshLayout),
 			placeholder <~ wire(placeholderContent)
 		) <~ rootStyle
-	)
 
 	def loading(): Ui[_] = (progressBar <~ vVisible) ~
 			(recyclerView <~ vGone) ~

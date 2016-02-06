@@ -20,6 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget._
 import com.fortysevendeg.macroid.extras.ResourcesExtras._
 import iwai.cellmon.R
@@ -29,7 +30,7 @@ import macroid.{ActivityContextWrapper, Ui}
 
 trait Layout
   extends Styles
-  with PlaceHolderLayout {
+    with PlaceHolderLayout {
 
   self: Fragment =>
 
@@ -41,7 +42,7 @@ trait Layout
 
   var aboutContent = slot[LinearLayout]
 
-  def content(implicit context: ActivityContextWrapper) = getUi(
+  def layout(implicit context: ActivityContextWrapper) = /*getUi(*/
     l[FrameLayout](
       l[LinearLayout](
         l[ScrollView](
@@ -62,35 +63,43 @@ trait Layout
       ) <~ wire(mainContent) <~ rootStyle,
       placeholder <~ wire(placeholderContent)
     )
-  )
 
+  /*  )*/
+
+}
+
+
+class CellChangeItemSlots {
+  var content = slot[LinearLayout]
+  var changeAt = slot[TextView]
+  var cell = slot[TextView]
 }
 
 class CellChangeItemLayout(implicit context: ActivityContextWrapper)
-  extends ItemStyles {
+extends ItemStyles {
 
-  var itemContent = slot[LinearLayout]
-  var changeAt = slot[TextView]
-  var cell = slot[TextView]
+  val slots = new CellChangeItemSlots
 
-  val content = layout
+  //  val content = layout
 
-  private def layout(implicit context: ActivityContextWrapper) = getUi(
-    l[LinearLayout](
-      w[TextView] <~ wire(changeAt) <~ changeAtStyle,
-      w[TextView] <~ wire(cell) <~ cellStyle
-    ) <~ wire(itemContent) <~ itemContentStyle
-  )
+  val layout = l[LinearLayout](
+    w[TextView] <~ wire(slots.changeAt) <~ changeAtStyle,
+    w[TextView] <~ wire(slots.cell) <~ cellStyle
+  ) <~ wire(slots.content) <~ contentStyle
+
+  //  def layout(implicit context: ActivityContextWrapper) = /*getUi(*/
+  //    l[LinearLayout](
+  //      w[TextView] <~ wire(changeAt) <~ changeAtStyle,
+  //      w[TextView] <~ wire(cell) <~ cellStyle
+  //    ) <~ wire(content) <~ itemContentStyle
+  ///*  )*/
 }
 
 class CellChangeViewHolder(itemLayout: CellChangeItemLayout)(implicit context: ActivityContextWrapper)
-  extends RecyclerView.ViewHolder(itemLayout.content) {
+  extends RecyclerView.ViewHolder(getUi(itemLayout.layout))
+    with RecyclerClickableViewHolder {
 
   // shortcut to slot
-  val content = itemLayout.content
-
-//  val logo = adapter.logo
-  val changeAt = itemLayout.changeAt
-  val cell = itemLayout.cell
-
+  val slots = itemLayout.slots
+  override val clickableSlot = slots.content
 }
