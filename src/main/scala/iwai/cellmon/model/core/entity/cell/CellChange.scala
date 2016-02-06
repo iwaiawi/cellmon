@@ -11,11 +11,4 @@ case object CellChange {
 	def apply(cell: Cell): CellChange =
 		CellChange(System.currentTimeMillis(), cell)
 
-//	trait JsonProtocol extends DefaultJsonProtocol {
-//
-//		implicit val cellChangeFormat = jsonFormat(CellChange.apply, "changeAtInMillis", "cell")
-//	}
-//
-//	object JsonProtocol extends JsonProtocol
-
 }
