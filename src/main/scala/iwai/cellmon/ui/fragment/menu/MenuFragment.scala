@@ -17,7 +17,7 @@
 package iwai.cellmon.ui.fragment.menu
 
 import android.app.Activity
-import android.content.Intent
+import android.content.{Context, Intent}
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -74,9 +74,14 @@ class MenuFragment
 
 //  private var mainMenuVisible: Boolean = true
 
-  override def onAttach(activity: Activity) = {
-    super.onAttach(activity)
-    mainActivity = Some(activity.asInstanceOf[MainActivity])
+//  override def onAttach(activity: Activity) = {
+//    super.onAttach(activity)
+//    mainActivity = Some(activity.asInstanceOf[MainActivity])
+//  }
+
+  override def onAttach(context: Context) = {
+    super.onAttach(context)
+    mainActivity = Some(context.asInstanceOf[MainActivity])
   }
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {

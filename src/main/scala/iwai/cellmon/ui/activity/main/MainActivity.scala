@@ -14,7 +14,7 @@ import android.widget._
 import iwai.cellmon.R
 import iwai.cellmon.ui.activity.TweakHelper
 import iwai.cellmon.ui.fragment.about.AboutFragment
-import iwai.cellmon.ui.fragment.cells.CellsFragment
+import iwai.cellmon.ui.fragment.cells.CellChangesFragment
 import iwai.cellmon.ui.fragment.menu.MenuSection._
 import iwai.cellmon.ui.fragment.menu.{MenuFragment, MenuSection}
 import iwai.cellmon.ui.service.CellChangeListener
@@ -152,7 +152,7 @@ class MainActivity
 //    			case CONTACTS => f[QrCodeFragment]
 //    			case SPONSORS => f[SponsorsFragment]
 //    			case PLACES => f[PlacesFragment]
-    			case CELLS => f[CellsFragment]
+    			case CELLS => f[CellChangesFragment]
 //    			case LOCATIONS => f[PlacesFragment]
     			case ABOUT => f[AboutFragment]
     			case _ => throw new IllegalStateException

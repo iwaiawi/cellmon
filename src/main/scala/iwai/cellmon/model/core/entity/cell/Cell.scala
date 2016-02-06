@@ -1,7 +1,5 @@
 package iwai.cellmon.model.core.entity.cell
 
-import iwai.cellmon.model.core.entity.cell.{GsmCellLocation, NoCellLocation}
-
 sealed trait Cell
 
 sealed trait CellLocation extends Cell
@@ -16,7 +14,7 @@ final case class CdmaCellLocation(stationId: Int, systemId: Int, networkId: Int,
 
 case object NoCellLocation extends CellLocation with NoCell
 
-@deprecated
+@deprecated("Use CellIdentity instead.", "0.2")
 final case class CellIdentities(identities: Set[CellIdentity]) extends Cell {
   def get = identities
 }
@@ -116,7 +114,7 @@ case object CdmaCellLocation {
 
 }
 
-@deprecated
+@deprecated("Use CellIdentity instead.", "0.2")
 case object CellIdentities {
   def apply(i: List[android.telephony.CellInfo]): CellIdentities =
     apply(
