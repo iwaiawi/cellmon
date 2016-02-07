@@ -2,7 +2,8 @@ package iwai.cellmon.model.core.entity.cell
 
 import java.util.Date
 
-import iwai.cellmon.model.core.entity.{Location, LocationProvider}
+import iwai.cellmon.model.core.entity.LocationProvider
+import iwai.cellmon.model.core.entity.location.Location
 
 
 case class CellLocationLog[+A <: Cell](cell: A, location: Location, timeInMillis: Long, provider: LocationProvider) {

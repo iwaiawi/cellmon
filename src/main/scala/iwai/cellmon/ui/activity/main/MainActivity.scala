@@ -17,7 +17,7 @@ import iwai.cellmon.ui.fragment.about.AboutFragment
 import iwai.cellmon.ui.fragment.cells.CellChangesFragment
 import iwai.cellmon.ui.fragment.menu.MenuSection._
 import iwai.cellmon.ui.fragment.menu.{MenuFragment, MenuSection}
-import iwai.cellmon.ui.service.CellChangeListener
+import iwai.cellmon.ui.service.{CellLocationChangeListener, LocationChangeListener, CellChangeListener}
 import macroid.{Contexts, IdGeneration, Ui}
 
 // import macroid stuff
@@ -95,7 +95,7 @@ class MainActivity
   override def onCreate(savedInstanceState: Bundle) = {
     super.onCreate(savedInstanceState)
     //		setContentView(getUi(verticalLayout))
-    startService(new Intent(this, classOf[CellChangeListener]))
+    startService(new Intent(this, classOf[CellLocationChangeListener]))
 
 
     setContentView(layout)

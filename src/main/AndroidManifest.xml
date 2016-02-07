@@ -36,6 +36,6 @@
         android:label="Setting"
         android:name=".ui.activity.SettingActivity">
     </activity>
-    <service android:name=".ui.service.CellChangeListener" />
+    <service android:name=".ui.service.CellLocationChangeListener" />
   </application>
 </manifest>
