@@ -5,3 +5,4 @@ proguard-sbt.txt
 gen
 project/project
 project/target
+AWSConfiguration.java

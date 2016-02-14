@@ -17,6 +17,10 @@
 
 <resources>
 
+    <string name="content_file_provider_authority">com.mysampleapp.fileprovider</string>
+    <string name="facebook_app_id">9665677667431288</string>
+    <string name="google_cloud_messaging_package">com.mysampleapp</string>
+
     <string name="app_name">Scala Days</string>
 
     <string name="schedule">Schedule</string>
