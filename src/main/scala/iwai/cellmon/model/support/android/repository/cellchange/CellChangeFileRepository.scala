@@ -22,15 +22,15 @@ class CellChangeFileRepository(implicit val ctx: ContextWrapper)
 
 	implicit val partitionFactory = new CellChangeFilePartitionFactory
 
-	override def entityToJson(entity: CellChange): JsValue = entity.toJson
+	override def entityToJson(entity: CellChange): String = entity.toJson.compactPrint
 
-	override def jsonToEntity(jsonString: String): CellChange = jsonString.parseJson.convertTo[CellChange]
+	override def jsonToEntity(json: String): CellChange = json.parseJson.convertTo[CellChange]
 
 	override def entityToPartitionKey(entity: CellChange): Day = entity.changeAt.toDay
 
-	override def isEntityMatchedByQuery(query: Period)(entity: CellChange): Boolean = query.contains(entity.changeAt)
+	override def isEntityThatMatchQuery(query: Period)(entity: CellChange): Boolean = query.contains(entity.changeAt)
 
-	override def isPartitionMatchedByQuery(query: Period)(p: FilePartition[Day]): Boolean = query.overlapWith(p.key)
+	override def isPartitionThatMatchQuery(query: Period)(p: FilePartition[Day]): Boolean = query.overlapWith(p.key)
 
 	//	override def put(entity: CellChange): Task[(this.type, CellChange)] = Task {
 	//		val writer = partitionFactory.byValue(entity.changeAt.toDay).writer(Context.MODE_PRIVATE | Context.MODE_APPEND)

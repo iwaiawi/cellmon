@@ -22,15 +22,15 @@ class LocationChangeFileRepository(implicit val ctx: ContextWrapper)
 
 	implicit val partitionFactory = new LocationChangeFilePartitionFactory
 
-	override def entityToJson(entity: LocationChange): JsValue = entity.toJson
+	override def entityToJson(entity: LocationChange): String = entity.toJson.compactPrint
 
-	override def jsonToEntity(jsonString: String): LocationChange = jsonString.parseJson.convertTo[LocationChange]
+	override def jsonToEntity(json: String): LocationChange = json.parseJson.convertTo[LocationChange]
 
 	override def entityToPartitionKey(entity: LocationChange): Day = entity.changeAt.toDay
 
-	override def isEntityMatchedByQuery(query: Period)(entity: LocationChange): Boolean = query.contains(entity.changeAt)
+	override def isEntityThatMatchQuery(query: Period)(entity: LocationChange): Boolean = query.contains(entity.changeAt)
 
-	override def isPartitionMatchedByQuery(query: Period)(p: FilePartition[Day]): Boolean = query.overlapWith(p.key)
+	override def isPartitionThatMatchQuery(query: Period)(p: FilePartition[Day]): Boolean = query.overlapWith(p.key)
 
 	// 以下使用しないため未実装
 	override def get(id: LocationChange => Boolean): Task[Option[LocationChange]] = ???

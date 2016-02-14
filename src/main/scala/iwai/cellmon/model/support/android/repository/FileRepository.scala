@@ -28,11 +28,13 @@ trait FileRepository[I, E, PK] {
 		closeable.close()
 	}
 
+	val lineSeparator = "\n"
+
 	implicit val ctx: ContextWrapper
 
-	def entityToJson(entity: E): JsValue
+	def entityToJson(entity: E): String
 
-	def jsonToEntity(jsonString: String): E
+	def jsonToEntity(json: String): E
 
 	val partitionFactory: FilePartitionFactory[PK, _ <: FilePartition[PK]]
 
@@ -40,7 +42,7 @@ trait FileRepository[I, E, PK] {
 
 	override def put(entity: E): Task[(this.type, E)] = Task {
 		val writer = partitionFactory.byKey(entityToPartitionKey(entity)).writer(Context.MODE_PRIVATE | Context.MODE_APPEND)
-		using(writer)(_.append(entityToJson(entity).compactPrint + "\n"))
+		using(writer)(_.append(entityToJson(entity) + lineSeparator))
 		(this, entity)
 	}
 }
@@ -48,44 +50,45 @@ trait FileRepository[I, E, PK] {
 trait MultiOpFileRepository[Q, I, E, PK] {
 	self: MultiOpRepository[Q, I, E] with FileRepository[I, E, PK] =>
 
-	def isPartitionMatchedByQuery(query: Q)(p: FilePartition[PK]): Boolean
+	def isPartitionThatMatchQuery(query: Q)(p: FilePartition[PK]): Boolean
 
-	def isEntityMatchedByQuery(query: Q)(entity: E): Boolean
+	def isEntityThatMatchQuery(query: Q)(entity: E): Boolean
 
 	override def getMulti(query: Q): Task[Seq[E]] = Task {
 		(for {
-			partition <- partitionFactory.getAll().filter(isPartitionMatchedByQuery(query)(_))
+			partition <- partitionFactory.getAll().filter(isPartitionThatMatchQuery(query)(_))
 			reader <- partition.reader
 		} yield {
 			using(reader) { r =>
 				Iterator.continually(r.readLine()).takeWhile(_ != null).map { jsonString =>
 					jsonToEntity(jsonString)
-				}.filter(isEntityMatchedByQuery(query)(_))
+				}.filter(isEntityThatMatchQuery(query)(_))
 					.toList
 			}
 		}).flatten
 	}
 
-	def putMulti(entities: E*): Task[(this.type, Seq[E])]
+	def putMulti(entities: E*): Task[(this.type, Seq[E])] = ???
 
 	override def removeMulti(query: Q): Task[(this.type, Seq[E])] = Task {
-		val removed = partitionFactory.getAll() /*.par*/ .filter(isPartitionMatchedByQuery(query)(_)).flatMap { p =>
+		val removed = partitionFactory.getAll() /*.par*/ .filter(isPartitionThatMatchQuery(query)(_)).flatMap { p =>
 			p.reader.map { reader =>
 				val (toRemove, toLeft) = using(reader) { r =>
 					Iterator.continually(r.readLine()).takeWhile(_ != null).map { jsonString =>
 						(jsonString, jsonToEntity(jsonString))
 					}.toList
 				}.partition { jsonAndEntity =>
-					isEntityMatchedByQuery(query)(jsonAndEntity._2)
+					isEntityThatMatchQuery(query)(jsonAndEntity._2)
 				}
 
 				if(toLeft.isEmpty) {
 					ctx.bestAvailable.deleteFile(p.name)
 				} else {
 					using(p.writer(Context.MODE_PRIVATE)) {
-						_.append(toLeft.map(_._1).mkString("", "\n", "\n"))
+						_.append(toLeft.map(_._1).mkString("", lineSeparator, lineSeparator))
 					}
 				}
+
 				toRemove.map(_._2)
 			}
 		}.flatten
@@ -94,7 +97,7 @@ trait MultiOpFileRepository[Q, I, E, PK] {
 	}
 }
 
-trait FilePartition[A] extends Partition[A] {
+trait FilePartition[PK] extends Partition[PK] {
 	val charset = "UTF-8"
 
 	def reader(implicit ctx: ContextWrapper): Option[BufferedReader] = {
