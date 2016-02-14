@@ -61,7 +61,7 @@ trait Styles {
         resGetDimensionPixelSize(R.dimen.padding_menu_image_action_tb))
 }
 
-trait MainMenuAdapterStyles {
+trait ItemStyles {
 
   def mainMenuItemStyle(implicit context: ContextWrapper): Tweak[FrameLayout] =
     lp[AbsListView](MATCH_PARENT, resGetDimensionPixelSize(R.dimen.height_menu_item)) +

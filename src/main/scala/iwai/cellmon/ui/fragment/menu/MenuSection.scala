@@ -18,8 +18,8 @@ package iwai.cellmon.ui.fragment.menu
 
 object MenuSection extends Enumeration {
 
-  type MenuSection = Value
+	type MenuSection = Value
 
-  val CELLS, LOCATIONS, ABOUT/*, SPEAKERS, SCHEDULE, SOCIAL, CONTACTS, SPONSORS, TICKETS, PLACES*/ = Value
+	val CELLS, LOCATIONS, ABOUT = Value
 
 }

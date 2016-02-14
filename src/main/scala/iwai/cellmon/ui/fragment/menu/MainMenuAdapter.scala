@@ -21,77 +21,47 @@ import android.view.View.OnClickListener
 import android.view.{View, ViewGroup}
 import MenuSection._
 import iwai.cellmon.R
-import macroid.{IdGeneration, ActivityContextWrapper}
+import iwai.cellmon.ui.common.Id.{DrawableR, StringR}
+import iwai.cellmon.ui.common.{Id, CheckableFrameLayout}
+import macroid.{Tweak, Ui, IdGeneration, ActivityContextWrapper}
 import com.fortysevendeg.macroid.extras.TextTweaks._
+import iwai.support.macroid.CheckableViewTweaks._
 import macroid.FullDsl._
 
-class MainMenuAdapter(listener: MainMenuClickListener)
-    (implicit context: ActivityContextWrapper)
-    extends RecyclerView.Adapter[ViewHolderMainMenuAdapter]
-    with IdGeneration {
+class MainMenuAdapter(
+	viewModels: Seq[MainMenuViewModel],
+	afterCreateViewHolder: MainMenuViewHolder => Ui[_] = (_ => Ui.nop)
+)(implicit context: ActivityContextWrapper)
+	extends RecyclerView.Adapter[MainMenuViewHolder]
+		with IdGeneration {
 
-  var selectedItem: Option[MainMenuItem] = None
+	var selectedModel: Option[MainMenuViewModel] = None
 
-  val recyclerClickListener = listener
+	override def onCreateViewHolder(parentViewGroup: ViewGroup, i: Int): MainMenuViewHolder = {
+		val viewHolder = new MainMenuViewHolder(new MainMenuItemLayout)
+		runUi(afterCreateViewHolder(viewHolder))
+		viewHolder
+	}
 
-  val list = List(
-//    MainMenuItem(Id.schedule,
-//      context.application.getString(R.string.schedule),
-//      R.drawable.menu_icon_schedule, SCHEDULE),
-//    MainMenuItem(Id.social,
-//      context.application.getString(R.string.social),
-//      R.drawable.menu_icon_social, SOCIAL),
-//    MainMenuItem(Id.speaker,
-//      context.application.getString(R.string.speakers),
-//      R.drawable.menu_icon_speakers, SPEAKERS),
-//    MainMenuItem(Id.tickets,
-//      context.application.getString(R.string.tickets),
-//      R.drawable.menu_icon_tickets, TICKETS),
-//    MainMenuItem(Id.contacts,
-//      context.application.getString(R.string.contacts),
-//      R.drawable.menu_icon_contact, CONTACTS),
-    MainMenuItem(Id.cells,
-      context.application.getString(R.string.cells),
-      R.drawable.menu_icon_places, CELLS),
-    MainMenuItem(Id.locations,
-      context.application.getString(R.string.locations),
-      R.drawable.menu_icon_places, LOCATIONS),
-    MainMenuItem(Id.about,
-      context.application.getString(R.string.about),
-      R.drawable.menu_icon_about, ABOUT)
-  )
+	override def getItemCount: Int = viewModels.size
 
-  override def onCreateViewHolder(parentViewGroup: ViewGroup, i: Int): ViewHolderMainMenuAdapter = {
-    val adapter = new MainMenuAdapterLayout()
-    adapter.content.setOnClickListener(new OnClickListener {
-      override def onClick(v: View): Unit = recyclerClickListener.onClick(list(v.getTag.asInstanceOf[Int]))
-    })
-    new ViewHolderMainMenuAdapter(adapter)
-  }
+	override def onBindViewHolder(viewHolder: MainMenuViewHolder, position: Int): Unit = {
+		val model = viewModels(position)
 
-  override def getItemCount: Int = list.size
+		runUi(
+			(viewHolder.slots.title <~ tvText(model.name)
+				<~ tvCompoundDrawablesWithIntrinsicBounds(model.icon, 0, 0, 0)) ~
+				(viewHolder.slots.content <~ (selectedModel match {
+					case Some(selected) if selected.id == model.id => cvChecked(true)
+					case _ => cvChecked(false)
+				}))
+		)
+	}
 
-  override def onBindViewHolder(viewHolder: ViewHolderMainMenuAdapter, position: Int): Unit = {
-    val mainMenuItem = list(position)
-    viewHolder.content.setTag(position)
-    runUi(
-      viewHolder.title <~ tvText(mainMenuItem.name) <~ tvCompoundDrawablesWithIntrinsicBounds(mainMenuItem.icon, 0, 0, 0)
-    )
-
-    selectedItem match {
-      case Some(menuItem) if menuItem.id == mainMenuItem.id => viewHolder.content.setChecked(true)
-      case _ => viewHolder.content.setChecked(false)
-    }
-  }
-
-  def selectItem(menuItem: Option[MainMenuItem]) {
-    selectedItem = menuItem
-    notifyDataSetChanged()
-  }
+	def selectItem(model: Option[MainMenuViewModel]) {
+		selectedModel = model
+		notifyDataSetChanged()
+	}
 }
 
-trait MainMenuClickListener {
-  def onClick(mainMenuItem: MainMenuItem)
-}
-
-case class MainMenuItem(id: Int, name: String, icon: Int, section: MenuSection)
+case class MainMenuViewModel(id: Int, name: Id[StringR], icon: Id[DrawableR], section: MenuSection)

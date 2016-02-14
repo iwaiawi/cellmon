@@ -25,7 +25,7 @@ class CellChangesAdapter(
     val model = viewModels(position)
 
     runUi {
-      (viewHolder.slots.changeAt <~ tvDate(model.change.changeAt)) ~
+      (viewHolder.slots.changeAt <~ tvTimestamp(model.change.changeAt)) ~
         (viewHolder.slots.cell <~ tvCell(model.change.cell))
     }
   }

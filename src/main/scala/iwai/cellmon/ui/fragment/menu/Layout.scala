@@ -23,55 +23,57 @@ import macroid.FullDsl._
 import macroid.ActivityContextWrapper
 
 trait Layout
-    extends Styles {
+	extends Styles {
 
-  var drawerMenuLayout = slot[LinearLayout]
+	var drawerMenuLayout = slot[LinearLayout]
 
-  var bigImageLayout = slot[FrameLayout]
+	var bigImageLayout = slot[FrameLayout]
 
-  var bigImage = slot[ImageView]
+	var bigImage = slot[ImageView]
 
-  var conferenceTitle = slot[TextView]
+	var conferenceTitle = slot[TextView]
 
-  var conferenceSelector = slot[ImageView]
+	var conferenceSelector = slot[ImageView]
 
-  var recyclerView = slot[RecyclerView]
+	var recyclerView = slot[RecyclerView]
 
-  def content(implicit context: ActivityContextWrapper) = getUi(
-    l[LinearLayout](
-      l[FrameLayout](
-        w[ImageView] <~ wire(bigImage) <~ bigImageStyle,
-        l[LinearLayout](
-          w[TextView] <~ wire(conferenceTitle)/* <~ conferenceTitleStyle*/,
-          w[ImageView] <~ wire(conferenceSelector)/* <~ conferenceSelectorStyle*/
-        ) <~ bigImageActionLayout
-      ) <~ wire(bigImageLayout) <~ bigImageLayoutStyle,
-      w[RecyclerView] <~ wire(recyclerView) <~ drawerMenuStyle
-    ) <~ menuStyle
-  )
+	def layout(implicit context: ActivityContextWrapper) = {
+		l[LinearLayout](
+			l[FrameLayout](
+				w[ImageView] <~ wire(bigImage) <~ bigImageStyle,
+				l[LinearLayout](
+					w[TextView] <~ wire(conferenceTitle) /* <~ conferenceTitleStyle*/ ,
+					w[ImageView] <~ wire(conferenceSelector) /* <~ conferenceSelectorStyle*/
+				) <~ bigImageActionLayout
+			) <~ wire(bigImageLayout) <~ bigImageLayoutStyle,
+			w[RecyclerView] <~ wire(recyclerView) <~ drawerMenuStyle
+		) <~ menuStyle
+	}
 
 }
 
-class MainMenuAdapterLayout(implicit context: ActivityContextWrapper)
-  extends MainMenuAdapterStyles {
-
-  var menuItem = slot[TextView]
-
-  val content = layout
-
-  private def layout(implicit context: ActivityContextWrapper) = getUi(
-    l[CheckableFrameLayout](
-      w[TextView] <~ wire(menuItem) <~ textMenuItemStyle
-    ) <~ mainMenuItemStyle
-  )
+class MainMenuItemSlots {
+	var content = slot[CheckableFrameLayout]
+	var title = slot[TextView]
 }
 
-class ViewHolderMainMenuAdapter(adapterLayout: MainMenuAdapterLayout)
-  (implicit context: ActivityContextWrapper)
-    extends RecyclerView.ViewHolder(adapterLayout.content) {
+class MainMenuItemLayout(implicit context: ActivityContextWrapper)
+	extends ItemStyles {
 
-  val content = adapterLayout.content
+	val slots = new MainMenuItemSlots
+	//	var menuItem = slot[TextView]
 
-  val title = adapterLayout.menuItem
+	//	val content = layout
 
+	val layout = l[CheckableFrameLayout](
+		w[TextView] <~ wire(slots.title) <~ textMenuItemStyle
+	) <~ wire(slots.content) <~ mainMenuItemStyle
+}
+
+class MainMenuViewHolder(itemLayout: MainMenuItemLayout)
+	(implicit context: ActivityContextWrapper)
+	extends RecyclerView.ViewHolder(getUi(itemLayout.layout)) {
+
+	// shortcut to slot
+	val slots = itemLayout.slots
 }

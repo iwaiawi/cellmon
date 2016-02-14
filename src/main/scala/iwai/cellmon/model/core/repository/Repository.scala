@@ -60,21 +60,21 @@ trait UpdatableRepository[I, E/*, R <: UpdatableRepository[I, E, R]*/] {
 }
 
 
-trait Partition[A] {
-	val value: A
+trait Partition[PK] {
+	val key: PK
 	val name: String
 }
 
-trait PartitionFactory[A, P <: Partition[A]] {
-	val translator: PartitionTranslator[A]
+trait PartitionFactory[PK, P <: Partition[PK]] {
+	val translator: PartitionTranslator[PK]
 
 	def byName(name: String): Option[P]
 
-	def byValue(value: A): P
+	def byKey(key: PK): P
 }
 
-abstract class PartitionTranslator[A] extends Function1[String, Option[A]] {
-	def reverse(name: A): Option[String]
+abstract class PartitionTranslator[PK] extends Function1[String, Option[PK]] {
+	def reverse(name: PK): Option[String]
 }
 
 

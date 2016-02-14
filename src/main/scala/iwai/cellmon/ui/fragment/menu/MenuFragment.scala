@@ -18,7 +18,6 @@ package iwai.cellmon.ui.fragment.menu
 
 import android.app.Activity
 import android.content.{Context, Intent}
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -26,132 +25,85 @@ import android.view.{LayoutInflater, View, ViewGroup}
 import com.fortysevendeg.macroid.extras.RecyclerViewTweaks._
 import com.fortysevendeg.macroid.extras.TextTweaks._
 import com.fortysevendeg.macroid.extras.ImageViewTweaks._
+import com.fortysevendeg.macroid.extras.UIActionsExtras._
 import iwai.cellmon.R
+import iwai.cellmon.ui._
 import iwai.cellmon.ui.activity.main.MainActivity
+import iwai.cellmon.ui.common.Id._
+import iwai.cellmon.ui.fragment.menu.MenuSection._
 import macroid.FullDsl._
 import macroid._
 import com.fortysevendeg.macroid.extras.RecyclerViewTweaks._
 import com.fortysevendeg.macroid.extras.TextTweaks._
 import com.fortysevendeg.macroid.extras.ImageViewTweaks._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+//import scala.concurrent.ExecutionContext.Implicits.global
 
 class MenuFragment
-  extends Fragment
-  with Contexts[Fragment]
-//  with ComponentRegistryImpl
-//  with UiServices
-  with IdGeneration
-  with Layout {
+	extends Fragment
+		with Contexts[Fragment]
+		//  with ComponentRegistryImpl
+		//  with UiServices
+		with IdGeneration
+		with Layout {
 
-//  /*override */implicit lazy val contextProvider: ContextWrapper = fragmentContextWrapper
+	private var mainActivity: Option[MainActivity] = None
 
-  val defaultItem = 0
+	val menuItemList = List(
+		MainMenuViewModel(Id.cells, R.string.cells, R.drawable.menu_icon_places, CELLS),
+		MainMenuViewModel(Id.locations, R.string.locations, R.drawable.menu_icon_places, LOCATIONS),
+		MainMenuViewModel(Id.about, R.string.about, R.drawable.menu_icon_about, ABOUT)
+	)
 
-  private var mainActivity: Option[MainActivity] = None
+	private val previousItemSelectedKey = "previous_item_selected_key"
 
-//  private var urlTickets: Option[String] = None
+	val defaultItem = 0
 
-  private val previousItemSelectedKey = "previous_item_selected_key"
+	lazy val mainMenuAdapter: MainMenuAdapter = new MainMenuAdapter(menuItemList, afterCreateViewHolder = { vh =>
+		vh.slots.content <~ FuncOn.click { v: View =>
+			val menuItem = menuItemList(vh.getAdapterPosition)
+			itemSelected(menuItem)
+		}
+	})
 
-  lazy val mainMenuAdapter: MainMenuAdapter = new MainMenuAdapter(new MainMenuClickListener {
-    override def onClick(mainMenuItem: MainMenuItem) =
-      mainMenuItem.section match {
-//        case MenuSection.TICKETS =>
-////          analyticsServices.sendEvent(
-////            screenName = None,
-////            category = analyticsCategoryNavigate,
-////            action = analyticsActionGoToTickets)
-//          urlTickets map {
-//            url =>
-//              val intent = new Intent(Intent.ACTION_VIEW,
-//                Uri.parse(url))
-//              fragmentContextWrapper.getOriginal.startActivity(intent)
-//          }
-        case _ => itemSelected(mainMenuItem)
-      }
-  })
+	override def onAttach(context: Context) = {
+		super.onAttach(context)
+		mainActivity = Some(context.asInstanceOf[MainActivity])
+	}
 
-//  private var mainMenuVisible: Boolean = true
+	override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
+		getUi(layout)
+	}
 
-//  override def onAttach(activity: Activity) = {
-//    super.onAttach(activity)
-//    mainActivity = Some(activity.asInstanceOf[MainActivity])
-//  }
+	override def onViewCreated(view: View, savedInstanceState: Bundle) = {
+		super.onViewCreated(view, savedInstanceState)
+		val defaultSection = Option(savedInstanceState) map (_.getInt(previousItemSelectedKey, defaultItem)) getOrElse defaultItem
 
-  override def onAttach(context: Context) = {
-    super.onAttach(context)
-    mainActivity = Some(context.asInstanceOf[MainActivity])
-  }
+		runUi(
+			(recyclerView <~ rvLayoutManager(new LinearLayoutManager(fragmentContextWrapper.application))) ~
+				(recyclerView <~ rvAdapter(mainMenuAdapter)) ~
+				itemSelected(menuItemList(defaultSection), savedInstanceState == null)
+		)
 
-  override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
-    val root = content
-    runUi(
-      recyclerView <~ rvLayoutManager(new LinearLayoutManager(fragmentContextWrapper.application))
-    )
-    root
-  }
+	}
 
-  override def onViewCreated(view: View, savedInstanceState: Bundle) = {
-    super.onViewCreated(view, savedInstanceState)
-    runUi(
-      (recyclerView <~ rvAdapter(mainMenuAdapter)) /*~
-        (bigImageLayout <~ On.click {
-          Ui {
-            toggleMenu()
-          }
-        })*/
-    )
-    val defaultSection = Option(savedInstanceState) map (_.getInt(previousItemSelectedKey, defaultItem)) getOrElse defaultItem
-    itemSelected(mainMenuAdapter.list(defaultSection), savedInstanceState == null)
+	override def onSaveInstanceState(outState: Bundle): Unit = {
+		outState.putInt(previousItemSelectedKey, mainMenuAdapter.selectedModel map (menuItemList.indexOf(_)) getOrElse defaultItem)
+		super.onSaveInstanceState(outState)
+	}
 
-//    val result = for {
-//      conferences <- loadConferences()
-//      selectedConference <- findConference(conferences, loadSelectedConferenceId)
-//    } yield {
-//      showConference(selectedConference.info)
-//      urlTickets = Some(selectedConference.info.registrationSite)
-//    }
-//
-//    result.recover {
-//      case _ => failed()
-//    }
-  }
+	override def onDetach(): Unit = {
+		mainActivity = None
+		super.onDetach()
+	}
 
-//  def failed() = {}
+	def itemSelected(menuItem: MainMenuViewModel, callCallback: Boolean = true): Ui[_] = {
+		mainMenuAdapter.selectItem(Some(menuItem))
 
-
-  override def onSaveInstanceState(outState: Bundle): Unit = {
-    outState.putInt(previousItemSelectedKey, mainMenuAdapter.selectedItem map (mainMenuAdapter.list.indexOf(_)) getOrElse defaultItem)
-    super.onSaveInstanceState(outState)
-  }
-
-  override def onDetach(): Unit = {
-    mainActivity = None
-    super.onDetach()
-  }
-
-//  def toggleMenu() = {
-//    mainMenuVisible = !mainMenuVisible
-//    if (mainMenuVisible) runUi(
-//      (conferenceSelector <~ ivSrc(R.drawable.menu_header_select_arrow)) ~
-//        (recyclerView <~ rvAdapter(mainMenuAdapter)))
-//    else for {
-//      conferences <- loadConferences()
-//    } yield {
-//      conferenceMenuAdapter.loadConferences(conferences map (_.info))
-//      runUi(
-//        (conferenceSelector <~ ivSrc(R.drawable.menu_header_select_arrow_up)) ~
-//          (recyclerView <~ rvAdapter(conferenceMenuAdapter)))
-//    }
-//  }
-
-//  def showMainMenu =
-//    if (!mainMenuVisible) toggleMenu()
-
-  def itemSelected(menuItem: MainMenuItem, callCallback: Boolean = true) = {
-    mainMenuAdapter.selectItem(Some(menuItem))
-    if (callCallback) mainActivity map (_.itemSelected(menuItem.section, menuItem.name))
-  }
+		mainActivity match {
+			case Some(activity) if callCallback => activity.itemSelected(menuItem.section, menuItem.name)
+			case _ => Ui.nop
+		}
+	}
 
 }

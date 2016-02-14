@@ -23,26 +23,24 @@ import macroid.FullDsl._
 import macroid.{ActivityContextWrapper, IdGeneration}
 
 trait Layout
-    extends ToolbarLayout
-    with IdGeneration
-    with Styles {
+	extends ToolbarLayout
+		with IdGeneration
+		with Styles {
 
-  var drawerLayout = slot[DrawerLayout]
+	var drawerLayout = slot[DrawerLayout]
 
-  var fragmentMenu = slot[FrameLayout]
+	var fragmentMenu = slot[FrameLayout]
 
-  var fragmentContent = slot[FrameLayout]
+	var fragmentContent = slot[FrameLayout]
 
-  def layout(implicit context: ActivityContextWrapper) = {
-    getUi(
-      l[DrawerLayout](
-        l[LinearLayout](
-          toolBarLayout(),
-          l[FrameLayout]() <~ wire(fragmentContent) <~ id(Id.mainFragment) <~ fragmentContentStyle
-        ) <~ contentStyle,
-        l[FrameLayout]() <~ wire(fragmentMenu) <~ id(Id.menuFragment) <~ drawerLayoutStyle
-      ) <~ wire(drawerLayout) <~ drawerStyle
-    )
-  }
+	def layout(implicit context: ActivityContextWrapper) = {
+		l[DrawerLayout](
+			l[LinearLayout](
+				toolBarLayout(),
+				l[FrameLayout]() <~ wire(fragmentContent) <~ id(Id.mainFragment) <~ fragmentContentStyle
+			) <~ contentStyle,
+			l[FrameLayout]() <~ wire(fragmentMenu) <~ id(Id.menuFragment) <~ drawerLayoutStyle
+		) <~ wire(drawerLayout) <~ drawerStyle
+	}
 
 }
